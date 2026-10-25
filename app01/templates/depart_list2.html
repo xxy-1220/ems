@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <!-- 新建部门按钮 -->
+    <a href="/depart/add/" class="btn btn-success">
+        <span class="glyphicon glyphicon-plus"></span> 新建部门
+    </a>
+    <br><br>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <span class="glyphicon glyphicon-list"></span> 部门列表
+        </div>
+        <div class="panel-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>名称</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in data_list %}
+                    <tr>
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.title }}</td>
+                        <td>
+                            <a href="/depart/edit/{{ item.id }}/" class="btn btn-sm btn-primary">编辑</a>
+                            <a href="/depart/delete/{{ item.id }}/" class="btn btn-sm btn-danger" onclick="return confirm('确定删除吗？')">删除</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

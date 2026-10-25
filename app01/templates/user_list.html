@@ -1,0 +1,179 @@
+﻿﻿﻿﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>用户列表</title>
+    <!-- 【修改】换成本地bootstrap静态文件 -->
+    <link rel="stylesheet" href="/static/plugins/bootstrap-3.4.1/css/bootstrap.min.css">
+    <script src="/static/plugins/bootstrap-3.4.1/js/jquery.min.js"></script>
+    <script src="/static/plugins/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        /* 新建用户按钮：绿色底 + 白色圆圈 + 加号 */
+        .btn-add {
+            display: inline-flex;
+            align-items: center;
+            background: #5cb85c;
+            color: #fff;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-size: 14px;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+        .btn-add:hover {
+            background: #4cae4c;
+            color: #fff;
+            text-decoration: none;
+        }
+        .btn-add .circle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 1.5px solid #fff;
+            margin-right: 6px;
+            font-size: 14px;
+            line-height: 1;
+        }
+
+        /* ==========【新增】搜索行样式 ========== */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .search-form {
+            display: flex;
+        }
+        .search-form .form-control {
+            width: 200px;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        .search-form .btn-search {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            border: 1px solid #ccc;
+            border-left: none;
+            background: #fff;
+        }
+        /* ==========【新增】分页样式 ========== */
+        .pagination {
+            padding-left: 0;
+            margin-top: 15px;
+        }
+        .pagination li {
+            display: inline-block;
+            border: 1px solid #ddd;
+            margin: 0 3px;
+            list-style: none;
+        }
+        .pagination li a {
+            display: block;
+            padding: 5px 10px;
+            text-decoration: none;
+            color: #333;
+        }
+        .pagination li.active {
+            background-color: #337ab7;
+            border-color: #337ab7;
+        }
+        .pagination li.active a {
+            color: white;
+        }
+    </style>
+</head>
+<body style="margin:20px;">
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">联通用户管理系统</a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/admin/list/">管理员管理</a></li>
+                <li><a href="/depart/list/">部门管理</a></li>
+                <li class="active"><a href="/user/list/">用户管理</a></li>
+                <li><a href="/pretty/list/">靓号管理</a></li>
+                <li><a href="/task/list/">任务管理</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">登录</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">徐湘雲 <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">退出</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading">用户列表</div>
+        <div class="panel-body">
+
+            <!-- ==========【修改】top-bar布局：左边两个新建按钮，右边搜索框 ========== -->
+            <div class="top-bar">
+                <div>
+                    <a href="/user/add/" class="btn-add">
+                        <span class="circle">+</span>新建用户
+                    </a>
+                    <a href="/user/add_modelform/" class="btn-add">
+                        <span class="circle">+</span>新建用户ModelForm
+                    </a>
+                </div>
+                <form class="search-form" method="get" action="/user/list/">
+                    <input type="text" class="form-control" name="q" value="{{ q }}" placeholder="搜索用户名">
+                    <button class="btn btn-search" type="submit">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </form>
+            </div>
+
+            <table class="table table-bordered" style="margin-top:15px;">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>姓名</th>
+                        <th>密码</th>
+                        <th>年龄</th>
+                        <th>余额</th>
+                        <th>入职时间</th>
+                        <th>部门</th>
+                        <th>性别</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- ==========【修改】循环变量 user_data → queryset ========== -->
+                    {% for item in queryset %}
+                    <tr>
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.password }}</td>
+                        <td>{{ item.age }}</td>
+                        <td>{{ item.account }}</td>
+                        <td>{{ item.create_time }}</td>
+                        <td>{{ item.depart.title }}</td>
+                        <td>{{ item.get_gender_display }}</td>
+                        <td>
+                            <a class="btn btn-success btn-sm" href="/depart/edit/{{ obj.id }}/">编辑</a>
+                            <a class="btn btn-danger btn-sm" href="/depart/delete/{{ obj.id }}/" onclick="return confirm('确定删除吗？')">删除</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <!-- ==========【新增】分页渲染位置 ========== -->
+            {{ page_html }}
+        </div>
+    </div>
+</div>
+</body>
+</html>

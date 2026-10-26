@@ -20,8 +20,12 @@ from django.urls import path
 # 按新目录结构，分别导入各模块的视图
 from app01.views import user, depart, pretty, task
 from app01.views import admin as admin_view
+from app01.views import account
 
 urlpatterns = [
+    # 登录 / 注销
+    path("login/", account.login),
+    path("logout/", account.logout),
     # 管理员相关
     path("admin/list/", admin_view.admin_list),
     path("admin/add/", admin_view.admin_add),
